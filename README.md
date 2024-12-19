@@ -28,3 +28,51 @@ generateObjects:
                       echo "hey"
               restartPolicy: OnFailure
 ```
+
+## Example ArgoCD App Manifest
+
+```yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cronjob-nightly
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/hepapi/helm-gen-objects-from-values.git  
+    targetRevision: HEAD  
+    path: gen-objects-from-values  
+    helm:
+      valuesObject:
+        generateObjects:
+          - apiVersion: batch/v1
+            kind: CronJob
+            metadata:
+              name: update-cronjob
+              namespace: argocd
+            spec:
+              timeZone: 'Asia/Istanbul'
+              schedule: "51 14 * * *"
+              jobTemplate:
+                spec:
+                  template:
+                    spec:
+                      containers:
+                        - name: curl
+                          image: curlimages/curl:latest
+                          command:
+                            - /bin/bash
+                            - -c
+                            - |
+                              echo "hey"
+                      restartPolicy: OnFailure
+
+  destination:
+    name: in-cluster
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+```
