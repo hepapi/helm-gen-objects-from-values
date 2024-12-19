@@ -20,9 +20,9 @@ generateObjects:
             spec:
               containers:
                 - name: abc
-                  image: alpine/curl:latest
+                  image: curlimages/curl:latest
                   command:
-                    - /bin/bash
+                    - /bin/sh
                     - -c
                     - |
                       echo "hey"
@@ -62,7 +62,7 @@ spec:
                         - name: curl
                           image: curlimages/curl:latest
                           command:
-                            - /bin/bash
+                            - /bin/sh
                             - -c
                             - |
                               echo "hey"
