@@ -1,0 +1,27 @@
+generateObjects:
+  - apiVersion: batch/v1
+    kind: CronJob
+    metadata:
+      name: argocd-replicas-down
+      namespace: argocd
+    spec:
+      timeZone: 'Asia/Istanbul'
+      schedule: "00 20 * * 1-5"
+      jobTemplate:
+        spec:
+          template:
+            spec:
+              containers:
+                - name: abc
+                  image: alpine/curl:latest
+                  command:
+                    - /bin/bash
+                    - -c
+                    - |
+                      echo "hey"
+              restartPolicy: OnFailure
+
+  - apiVersion: batch/v1
+    kind: CronJob
+    metadata:
+      name: argocd-replicas-down
